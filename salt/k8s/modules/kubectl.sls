@@ -5,7 +5,7 @@
 # Description:  Kubernetes kubectl
 #******************************************
 
-{% set k8s_version = "k8s-v1.15.2" %}
+{% set k8s_version = "k8s-v1.16.9" %}
 
 kubectl-admin-csr:
   file.managed:
