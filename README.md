@@ -21,9 +21,9 @@
 6. 本文的高可用可通用于任何云上的SDN环境和自建机房环境，例如阿里云的VPC环境中。
 
 ## 特别感谢
-写这个新的搭建步骤主要是方便使用和排错，对网络做了些调整。
-感谢devops学院推出的salt自动化搭建k8s流程https://github.com/unixhot/salt-kubernetes
-感谢SaltStack自动化部署HA-Kubernetes https://github.com/skymyyang/salt-k8s-ha.git
+1. 写这个新的搭建步骤主要是方便使用和排错，对网络做了些调整。
+2. 感谢devops学院推出的salt自动化搭建k8s流程https://github.com/unixhot/salt-kubernetes
+3. 感谢SaltStack自动化部署HA-Kubernetes https://github.com/skymyyang/salt-k8s-ha.git
 
 # 使用手册
 <table border="0">
