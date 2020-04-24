@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 #********************************************
-# Author:       Jason Zhao
-# Email:        shundong.zhao@linuxhot.com
+# Author:       zhanglong
+# Email:        392572435@qq.com
 # Organization: http://www.devopsedu.com/
 # Description:  Kubernetes Config with Pillar
 #********************************************
 
 #设置Master的IP地址(必须修改)
-MASTER_IP: "192.168.56.11"
+MASTER_IP_M1: "192.168.56.11"
+MASTER_IP_M2: "192.168.56.12"
+MASTER_IP_M3: "192.168.56.13"
 
 #设置ETCD集群访问地址（必须修改）
 ETCD_ENDPOINTS: "https://192.168.56.11:2379,https://192.168.56.12:2379,https://192.168.56.13:2379"
