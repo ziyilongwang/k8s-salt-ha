@@ -264,13 +264,23 @@ CLUSTER_DNS_DOMAIN: "cluster.local."
 ```
 执行高级状态，会根据定义的角色再对应的机器部署对应的服务
 
-5.2 重新生成ca证书，并替换templates下面的ca文件夹，参考手动制作CA证书步骤：
+5.2 重新生成ca证书，并替换templates下面的ca文件夹，参考手动制作CA证书步骤,并将证书进行替换
 ```
-[root@linux-node1 ~]#cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+cd /tmp/
+curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -o cfssl
+chmod +x cfssl
+curl -L https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -o cfssljson
+chmod +x cfssljson
+curl -L https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -o cfssl-certinfo
+chmod +x cfssl-certinfo
+mkdir /tmp/cert
+cd /tmp/cert
+cp /srv/salt/k8s/templates/ca/*json .
+../cfssl gencert -initca ca-csr.json | ../cfssljson -bare ca
+\cp -f  * /srv/salt/k8s/templates/ca/
 ```
-5.3 制作完成后，替换templates/ca/{ca-key.pem,ca.csr,ca.pem}
 
-5.4 部署Etcd，由于Etcd是基础组建，需要先部署，目标为部署etcd的节点。
+5.3 部署Etcd，由于Etcd是基础组建，需要先部署，目标为部署etcd的节点。
 ```
 [root@linux-node1 ~]# salt-ssh -L 'linux-node1,linux-node2,linux-node3' state.sls k8s.etcd
 ```
@@ -278,7 +288,7 @@ CLUSTER_DNS_DOMAIN: "cluster.local."
 
 
 
-5.5 部署K8S集群
+5.4 部署K8S集群
 ```
 [root@linux-node1 ~]# salt-ssh '*' state.highstate
 ```
