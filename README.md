@@ -172,9 +172,11 @@ drwxr-xr-x. 3 root root  17 Jun  3 19:12 k8s-v1.15.2
 
 ## 3.Salt SSH管理的机器以及角色分配
 
-- k8s-role: 用来设置K8S的角色
+- k8s-role-master: 用来设置K8S的master角色
+- k8s-role-node: 用来设置k8s的node角色
 - etcd-role: 用来设置etcd的角色，如果只需要部署一个etcd，只需要在一台机器上设置即可
 - etcd-name: 如果对一台机器设置了etcd-role就必须设置etcd-name
+
 
 ```
 [root@linux-node1 ~]# vim /etc/salt/roster 
@@ -262,13 +264,21 @@ CLUSTER_DNS_DOMAIN: "cluster.local."
 ```
 执行高级状态，会根据定义的角色再对应的机器部署对应的服务
 
-5.2 部署Etcd，由于Etcd是基础组建，需要先部署，目标为部署etcd的节点。
+5.2 重新生成ca证书，并替换templates下面的ca文件夹，参考手动制作CA证书步骤：
+```
+[root@linux-node1 ~]#cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+```
+5.3 制作完成后，替换templates/ca/{ca-key.pem,ca.csr,ca.pem}
+
+5.4 部署Etcd，由于Etcd是基础组建，需要先部署，目标为部署etcd的节点。
 ```
 [root@linux-node1 ~]# salt-ssh -L 'linux-node1,linux-node2,linux-node3' state.sls k8s.etcd
 ```
 注：如果执行失败，新手建议推到重来，请检查各个节点的主机名解析是否正确（监听的IP地址依赖主机名解析）。
 
-5.3 部署K8S集群
+
+
+5.5 部署K8S集群
 ```
 [root@linux-node1 ~]# salt-ssh '*' state.highstate
 ```

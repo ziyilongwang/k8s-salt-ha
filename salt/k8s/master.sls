@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 #******************************************
-# Author:       Jason Zhao
-# Email:        shundong.zhao@linuxhot.com
+# Author:       zhanglong
+# Email:        392572435@qq.com
 # Organization: http://www.devopsedu.com/
 # Description:  Kubernetes Master
 #******************************************
 include:
+  - k8s.modules.nginx
   - k8s.modules.ca-file
   - k8s.modules.cfssl
   - k8s.modules.cni
