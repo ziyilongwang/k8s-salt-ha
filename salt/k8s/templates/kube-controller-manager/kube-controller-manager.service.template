@@ -17,7 +17,8 @@ ExecStart=/opt/kubernetes/bin/kube-controller-manager \
   --leader-elect=true \
   --v=2 \
   --logtostderr=false \
-  --log-dir=/opt/kubernetes/log
+  --log-dir=/opt/kubernetes/log \
+  --experimental-cluster-signing-duration=87600h
 
 Restart=on-failure
 RestartSec=5
