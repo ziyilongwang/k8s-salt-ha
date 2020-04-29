@@ -5,7 +5,7 @@
 # Organization: http://www.devopsedu.com/
 # Description:  ETCD Cluster
 #******************************************
-{% set etcd_version = "etcd-v3.3.1-linux-amd64" %}
+{% set etcd_version = "etcd-v3.4.7-linux-amd64" %}
 
 include:
   - k8s.modules.base-dir

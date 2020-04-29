@@ -1,5 +1,6 @@
 worker_processes auto;
 
+load_module modules/ngx_stream_module.so;
 events {
     worker_connections  10240;
     use epoll;
@@ -8,8 +9,8 @@ error_log /var/log/nginx_error.log info;
 stream {
     upstream kube-servers {
         hash $remote_addr consistent;
-        server {{ MASTER_IP_M1 }}:6443          max_fails=3 fail_timeout=30s;
-        server {{ MASTER_IP_M2 }}:6443         max_fails=3 fail_timeout=30s;
+        server {{ MASTER_IP_M1 }}:6443        max_fails=3 fail_timeout=30s;
+        server {{ MASTER_IP_M2 }}:6443        max_fails=3 fail_timeout=30s;
         server {{ MASTER_IP_M3 }}:6443        max_fails=3 fail_timeout=30s;
     }
 

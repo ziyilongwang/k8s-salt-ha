@@ -3,12 +3,12 @@
 
 ## 版本明细：Release-v1.16.9
 - 测试通过系统：CentOS 7.4
-- salt-ssh:     2017.7.4
+- salt-ssh:     3000.1
 - Kubernetes：  v1.16.9
-- Etcd:         v3.3.1
+- Etcd:         v3.4.7
 - Docker-CE:    19.03.8-ce
 - Flannel：     v0.10.0
-- CNI-Plugins： v0.7.0
+- CNI-Plugins： v0.7.4
 - nginx: v1.16.1
 建议部署节点：最少三个节点，请配置好主机名解析（必备）。
 
@@ -266,18 +266,10 @@ CLUSTER_DNS_DOMAIN: "cluster.local."
 
 5.2 重新生成ca证书，并替换templates下面的ca文件夹，参考手动制作CA证书步骤,并将证书进行替换
 ```
-cd /tmp/
-curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -o cfssl
-chmod +x cfssl
-curl -L https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -o cfssljson
-chmod +x cfssljson
-curl -L https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -o cfssl-certinfo
-chmod +x cfssl-certinfo
-mkdir /tmp/cert
-cd /tmp/cert
-cp /srv/salt/k8s/templates/ca/*json .
-../cfssl gencert -initca ca-csr.json | ../cfssljson -bare ca
-\cp -f  * /srv/salt/k8s/templates/ca/
+cd /srv/salt/k8s/files/cfssl-1.2
+chmod +x cfssl-certinfo_linux-amd64  cfssljson_linux-amd64  cfssl_linux-amd64
+./cfssl_linux-amd64 gencert -initca ca-csr.json | ./cfssljson_linux-amd64 -bare ca
+mv -f ca-key.pem ca.pem ca.csr  /srv/salt/k8s/templates/ca/
 ```
 
 5.3 部署Etcd，由于Etcd是基础组建，需要先部署，目标为部署etcd的节点。
@@ -286,7 +278,13 @@ cp /srv/salt/k8s/templates/ca/*json .
 ```
 注：如果执行失败，新手建议推到重来，请检查各个节点的主机名解析是否正确（监听的IP地址依赖主机名解析）。
 
+etcd 验证部署(在master节点上执行)：
 
+``` bash
+/opt/kubernetes/bin/etcdctl  --cacert=/opt/kubernetes/ssl/ca.pem  --cert=/opt/kubernetes/ssl/etcd.pem  --key=/opt/kubernetes/ssl/etcd-key.pem   --endpoints https://192.168.56.11:2379,https://192.168.56.12:2379,https://192.168.56.13:2379 endpoint health
+
+/opt/kubernetes/bin/etcdctl  --cacert=/opt/kubernetes/ssl/ca.pem  --cert=/opt/kubernetes/ssl/etcd.pem  --key=/opt/kubernetes/ssl/etcd-key.pem   --endpoints https://192.168.56.11:2379,https://192.168.56.12:2379,https://192.168.56.13:2379 endpoint status
+```
 
 5.4 部署K8S集群
 ```
@@ -297,13 +295,8 @@ cp /srv/salt/k8s/templates/ca/*json .
 ## 6.测试Kubernetes安装
 ```
 [root@linux-node1 ~]# source /etc/profile
-[root@linux-node1 ~]# kubectl get cs
-NAME                 STATUS    MESSAGE             ERROR
-scheduler            Healthy   ok                  
-controller-manager   Healthy   ok                  
-etcd-0               Healthy   {"health":"true"}   
-etcd-2               Healthy   {"health":"true"}   
-etcd-1               Healthy   {"health":"true"}   
+[root@linux-node1 ~]# kubectl get cs (k8s v1.16+中，这个命令有bug，无法正确显示)
+[root@linux-node1 ~]# kubectl get cs -o yaml
 [root@linux-node1 ~]# kubectl get node
 NAME            STATUS    ROLES     AGE       VERSION
 192.168.56.12   Ready     <none>    1m        v1.10.3

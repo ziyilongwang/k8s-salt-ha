@@ -5,7 +5,8 @@
 # Organization: http://www.devopsedu.com/
 # Description:  Flannel
 #******************************************
-{% set flannel_version = "flannel-v0.10.0-linux-amd64" %}
+{% set flannel_version = "flannel-v0.11.0-linux-amd64" %}
+{% set etcd_version = "etcd-v3.4.7-linux-amd64" %}
 
 flannel-key:
   file.managed:
@@ -44,7 +45,13 @@ flannel-config:
     - template: jinja
     - defaults:
         ETCD_ENDPOINTS: {{ pillar['ETCD_ENDPOINTS'] }}
-
+etcdctl-bin:
+  file.managed:
+    - name: /opt/kubernetes/bin/etcdctl
+    - source: salt://k8s/files/{{ etcd_version }}/etcdctl
+    - user: root
+    - group: root
+    - mode: 755
 flannel-etcd:
   file.managed:
     - name: /opt/kubernetes/bin/flannel-etcd.sh

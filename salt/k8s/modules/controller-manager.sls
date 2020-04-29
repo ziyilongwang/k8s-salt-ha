@@ -4,7 +4,7 @@
 # Email:        392572435@qq.com
 # Description:  Kubernetes Controller Manager
 #********************************************
-{% set k8s_version = "k8s-v1.15.2" %}
+{% set k8s_version = "k8s-v1.16.9" %}
 
 kube-controller-manager-bin:
   file.managed:

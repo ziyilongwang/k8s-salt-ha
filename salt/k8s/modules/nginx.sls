@@ -12,20 +12,24 @@
 include:
   - k8s.modules.base-dir
 nginx-install:
-  pkg.installed:
-    - names:
-      - gcc
-      - gcc-c++
+  file.recurse:
+    - name: /usr/local/src/{{ nginx_version }}
+    - source: salt://k8s/files/{{ nginx_version }}
+    - user: root
+    - group: root
+    - dir_mode: 755 
+    - file_mode: 644  
+    - makedirs: True   
+  cmd.run:
+    - name: yum install -y /usr/local/src/{{ nginx_version }}/*rpm
+    - unless: test -e /usr/sbin/nginx
+nginx-stream_module:
   file.managed:
-    - name: /usr/local/src/{{ nginx_version }}.tar.gz
-    - source: salt://k8s/files/{{ nginx_version }}/{{ nginx_version }}.tar.gz
+    - name: /opt/kubernetes/kube-nginx/modules/ngx_stream_module.so
+    - source: salt://k8s/files/{{ nginx_version }}/ngx_stream_module.so
     - user: root
     - group: root
     - mode: 644
-    - template: jinja
-  cmd.run:
-    - name: cd /usr/local/src && tar -zxvf /usr/local/src/{{ nginx_version }}.tar.gz && cd /usr/local/src/{{ nginx_version }} && ./configure --with-stream --without-http --prefix=/opt/kubernetes/kube-nginx --without-http_uwsgi_module --without-http_scgi_module --without-http_fastcgi_module && make && make install
-    - unless: test -f /opt/kubernetes/kube-nginx/sbin/nginx
 nginx-config:
   file.managed:
     - name: /opt/kubernetes/kube-nginx/conf/kube-nginx.conf

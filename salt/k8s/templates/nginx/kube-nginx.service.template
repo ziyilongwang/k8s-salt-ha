@@ -6,9 +6,9 @@ Wants=network-online.target
 
 [Service]
 Type=forking
-ExecStartPre=/opt/kubernetes/kube-nginx/sbin/nginx -c /opt/kubernetes/kube-nginx/conf/kube-nginx.conf -p /opt/kubernetes/kube-nginx -t
-ExecStart=/opt/kubernetes/kube-nginx/sbin/nginx -c /opt/kubernetes/kube-nginx/conf/kube-nginx.conf -p /opt/kubernetes/kube-nginx
-ExecReload=/opt/kubernetes/kube-nginx/sbin/nginx -c /opt/kubernetes/kube-nginx/conf/kube-nginx.conf -p /opt/kubernetes/kube-nginx -s reload
+ExecStartPre=/usr/sbin/nginx -c /opt/kubernetes/kube-nginx/conf/kube-nginx.conf -p /opt/kubernetes/kube-nginx -t
+ExecStart=/usr/sbin/nginx -c /opt/kubernetes/kube-nginx/conf/kube-nginx.conf -p /opt/kubernetes/kube-nginx
+ExecReload=/usr/sbin/nginx -c /opt/kubernetes/kube-nginx/conf/kube-nginx.conf -p /opt/kubernetes/kube-nginx -s reload
 PrivateTmp=true
 Restart=always
 RestartSec=5

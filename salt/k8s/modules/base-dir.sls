@@ -31,6 +31,18 @@ path-env:
     - name: /etc/profile
     - text:
       - export PATH=$PATH:/opt/kubernetes/bin
+# nginx 目录创建
+nginx-dir:
+  file.directory:
+    - name: /opt/kubernetes/kube-nginx
+
+nginx-modules:
+  file.directory:
+    - name: /opt/kubernetes/kube-nginx/modules
+
+nginx-conf:
+  file.directory:
+    - name: /opt/kubernetes/kube-nginx/conf
 
 init-pkg:
   pkg.installed:

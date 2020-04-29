@@ -5,7 +5,7 @@
 # Organization: http://www.devopsedu.com/
 # Description:  CNI For Kubernetes
 #******************************************
-{% set cni_version = "cni-plugins-amd64-v0.7.0" %}
+{% set cni_version = "cni-plugins-amd64-v0.7.4" %}
 
 cni-dir:
   file.directory:
