@@ -9,7 +9,7 @@ WorkingDirectory=/var/lib/kubelet
 ExecStart=/opt/kubernetes/bin/kubelet \
   --address={{ NODE_IP }} \
   --hostname-override={{ NODE_IP }} \
-  --pod-infra-container-image=mirrorgooglecontainers/pause-amd64:3.0 \
+  --pod-infra-container-image=registry.cn-beijing.aliyuncs.com/acs/pause-amd64:3.0 \
   --bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
   --kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
   --cert-dir=/opt/kubernetes/ssl \
@@ -23,7 +23,11 @@ ExecStart=/opt/kubernetes/bin/kubelet \
   --fail-swap-on=false \
   --logtostderr=true \
   --v=2 \
-  --log-dir=/opt/kubernetes/log
+  --log-dir=/opt/kubernetes/log \
+  --system-reserved=cpu=100m,memory=300Mi,ephemeral-storage=512Mi \
+  --kube-reserved=cpu=200m,memory=300Mi,ephemeral-storage=512Mi \
+  --eviction-hard=imagefs.available<15%,memory.available<300Mi,nodefs.available<10%,nodefs.inodesFree<5% \
+  --cgroup-driver=systemd
 Restart=on-failure
 RestartSec=5
 
